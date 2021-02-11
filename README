@@ -1,0 +1,128 @@
+Stoica Vlad-Marian 311CB
+
+Tema este compusa din mai multe fisiere:
+
+	Fisierul utils.c in care se afla functia get_resources
+	Fisierul utils.h in care sunt declarate toate structurile folosite
+in tema
+	Fisierul fct.h in care sunt declarate toate functiile folosite in
+tema si apelate in main,la introducerea unei comenzi
+	Fisierul functii.c in care sunt implementate functiile declarate in
+fct.h
+	Fisierul main.c in care se apeleaza functiile depinzand de tipul 
+comenzii primite in fisierul de input si se afiseaza rezultatele in fisierul
+de output.
+
+	In main:
+Fisierele de intrare si iesire sunt in,respectiv out.
+Cozile ist_global,c_d,d_f reprezinta cozile pentru istoricul global,coada
+de descarcari active si coada pentru descarcari finalizate.
+Variabila listaTab este lista de tab-uri,iar variabila p este folostia pentru
+a retine tab-ul curent.
+Se initializeaza lista cu un tab gol,p ia valoarea sa,apoi se citesc comenzile
+din fisierul de input si se apeleaza functiile pentru comenzile respective.
+
+	In functii.c:
+InitS-initializeaz o stiva generica
+
+Push-adauga un element intr-o stiva generica
+
+Pop-elimina un element dintr-o stiva generica
+
+IntrQ-adauga un element in coada generica
+
+InitQ-initializeaz o coada generica
+
+ExtrQ-elimina un element din coada generica
+
+ResetQ-reseteaza o coada generica
+
+DistrQ-distruge o coada generica
+
+AlocLT-aloca memorie pentru un tab si pentru toata informatia retinuta
+de acesta;initializeaza si stivele de back si forward.Intoarce tab-ul alocat.
+
+AddTab-adauga un nou tab in lista de tab-uri.Aloca un nou tab si verifica
+alocarea.Se verifica daca este primul tab inserat si,in caz contrar,se
+parcurge lista de tab-uri pana la ultimul tab,apoi se adauga la final cel nou.
+Intoarce lista de tab-uri.
+
+ShowTabs-parcurge lista de tab-uri si verifica pentru fiecare daca are o
+pagina web deschisa.In functie de asta,afiseaza "empty" sau url-ul paginii
+web in fisierul de output.
+
+ElimTab-elimina ultimul tab din lista de tab-uri.Daca lista e vida,intoarce 0.
+Daca lista are un singur element,il elimina si lista devine vida.Altfel,
+parcurge lista pana la penultimul tab si il elimina pe urmatorul(ultimul tab).
+
+NWBP-adauga o noua pagina web intr-un tab.Aloca memorie pentru aceasta si
+obtine resursele apeland functia get_page_resources.Pentru fiecare resursa
+,currently_downloaded va retine dimensiunea ramasa de descarcat,ci nu 
+dimensiunea descarcata din resursa.Se apeleaza functia wait.apoi se verifica 
+daca tab-ul mai are vreo pagina web deschisa.Daca nu are,aceasta va fi pagina 
+web curenta.Daca are,pagina curenta va intra in stiva de back a tab-ului si
+pagina nou alocata va deveni cea curenta.La deschiderea unei noi pagini,
+stiva de forward a tab-ului devine nula.Se intoarce noul tab cu pagina web.
+
+BackWP-seteaza prima pagina din stiva de back(varful stivei) ca pagina curenta.
+Daca stiva de back e nula,se afiseaza mesajul "can't go back".Altfel,
+pagina curenta se impinge in stiva de forward si din stiva de back se elimina
+primul element si se adauga drept pagina curenta.Daca,dupa eliminare,stiva
+de back nu mai are elemente,varful sau ia valoarea NULL.
+
+FWP-seteaza prima pagina din stiva de forward(varful) ca pagina curenta.Se
+procedeaza la fel ca la functia BackWP,decat ca stiva de back e inlocuita cu
+cea de forward.
+Ambele functii returneaza tab-ul modificat.
+
+History-afiseaza istoricul global.Pentru ca s-a interzis iteratul prin cozi
+(asa scria in enuntul temei) se creeaza doua cozi noi x si q. p este coada
+initiala.Se afiseaza primul element din coada istoricului,apoi se elimina
+si este retinut in q,iar q este adaugat in noua coada x.Se continua acest
+proces pana la eliberarea cozii initiale.Astfel,coada x care se intoarce
+va fi exact coada initiala.
+
+Del_History-elimina nr_ent pagini din istoricul global.Se verifica daca
+nr_ent=0 si se reseteaza coada.Altfel,se verifica daca deja e coada vida,
+in acest caz se opreste functia.Daca nu e vida,se elimina primele nr_ent
+elemente.Daca nr_ent este mai mare decat numarul de elemente din coada,
+aceasta se reseteaza cand mai ramane un singur element si se apeleaza break.
+
+Afis_Resurse-se verifica daca pagina web are resurse(numele resursei trebuie
+sa fie mai mare decat 1 cel putin).Se introduce prima resursa in coada
+de resurse.Se parcurg resursele paginii web si se introduce fiecare in coada.
+Apoi,se parcurge coada de resurse si se afiseaza pe ecran resursele.
+
+Afis_Downloads_Crt-fucntia parcurge coada de descarcari curente si le afiseaza
+in output. Procedeul este asemanator cu cel de la functia History.
+
+Afis_Downloads_Comp-parcurge coada de descarcari complete si le afiseaza in
+fisierul de output.Procedeul este asemanator cu cel de la functia History.
+
+Download-adauga o resursa din pagina web,aflata la index-ul "index" in
+coada de descarcari curente.Verifica daca tab-ul curent are o pagina
+deschisa.Daca nu are,functia intoarce coada.Daca nu sunt alte elemente
+de descarcat,acesta este primul element si se adauga in coada de descarcari.
+Altfel,se verifica dimensiunea de descarcat a acestuia cu dimensiunea primului
+element din coada.Daca e mai mica dimensiunea resursei pe care vrem sa o
+introducem,se adauga aceasta intr-o coada auxiliara(aux).Se adauga fiecare
+element din coada initiala in coada auxiliara si se intoarce coada auxiliara.
+Daca dimensiunea e mai mare decat a primului element,se parcurge coada intiala
+si se adauga fiecare element intr-o coada auxiliara.Cand a fost gasita o
+valoare mai mare decat resursa pe care vrem sa o adaugam,se adauga resursa
+in coada auxiliara,apoi restul elementelor din coada intiala.Se intoarce
+coada auxiliara.Daca resursa pe care vrem sa o adaugam e mai mare decat
+orice element din coada de descarcari curente(cond==0),aceasta se adauga
+la sfarsitul cozii auxiliare.
+
+Wait-functia care descarca valoarea bandwidth-ului la fiecare secunda.
+Valoarea ce poate fi descarcata este loc=time*bandwidth.Cat timp aceasta
+este mai mare decat 0,se poate descarca din coada de descarcari curente.
+Se verifica daca loc este mai mare decat primul element din coada de
+descarcari curente.In acest caz,se scade din loc dimensiunea primului element
+si acesta va fi extras din c_d si adaugat in coada de descarcari finalizate.
+Acum noul prim element din coada va fi cel urmator si se procedeaza la fel
+pana cand loc e mai mic decat 0.De asemenea,se verifica daca toate elementele
+au fost descarcate,apare un break pentru a iesi din bucla.Daca resursa are
+dimensiunea mai mare decat se poate descraca,se scade loc din dimenisunea ramasa
+a resursei.
